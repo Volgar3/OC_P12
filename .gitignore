@@ -1,0 +1,19 @@
+# Secrets (identifiants BDD, secret JWT, DSN Sentry)
+.env
+
+# Environnement virtuel
+env/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Tests et couverture
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Système / éditeur
+.DS_Store
+.vscode/

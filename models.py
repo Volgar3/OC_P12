@@ -72,7 +72,11 @@ class Client(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True)
     telephone: Mapped[str] = mapped_column(String(20))
     enterprise_name: Mapped[str] = mapped_column(String(100))
+<<<<<<< HEAD
     created_at: Mapped[date] = mapped_column(
+=======
+    created_at: Mapped[datetime] = mapped_column(
+>>>>>>> c48abccb9b17c57c7b7f2cba31800ae038772aa3
         Date,
         server_default=func.now(),
     )

@@ -1,9 +1,10 @@
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from sqlalchemy import (
     CheckConstraint,
     Column,
+    Date,
     DateTime,
     ForeignKey,
     Numeric,
@@ -71,12 +72,12 @@ class Client(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True)
     telephone: Mapped[str] = mapped_column(String(20))
     enterprise_name: Mapped[str] = mapped_column(String(100))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
+    created_at: Mapped[date] = mapped_column(
+        Date,
         server_default=func.now(),
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime,
+        Date,
         server_default=func.now(),
         onupdate=func.now(),
     )
@@ -103,7 +104,7 @@ class Contract(Base):
         DateTime,
         server_default=func.now(),
     )
-    contract_is_signed: Mapped[bool] = mapped_column(default=False)
+    is_signed: Mapped[bool] = mapped_column(default=False)
     events: Mapped[list["Event"]] = relationship(back_populates="contract")
 
 

@@ -1,7 +1,9 @@
-from sqlalchemy import select
+"""Initialise la DB, à lancer en premier"""
 
-from database import Session
-from models import Group, Permission
+from sqlalchemy import select, create_engine
+
+from database import Session, build_url
+from models import Base, Group, Permission
 
 PERMISSIONS_BY_GROUP = {
     "gestion": [
@@ -43,6 +45,10 @@ def get_or_create(session, model, name):
 
 
 def seed():
+    engine = create_engine(build_url("OWNER"))
+    Base.metadata.create_all(engine)
+    engine.dispose()
+
     with Session() as session:
         for group_name, permission_names in PERMISSIONS_BY_GROUP.items():
             group = get_or_create(session, Group, group_name)

@@ -112,6 +112,18 @@ le fichier `pg_hba.conf` (son emplacement s'obtient avec `psql postgres -c 'SHOW
 puis redémarrer PostgreSQL. Pensez à définir d'abord un mot de passe pour le
 super-utilisateur (`\password` dans `psql`) et à le reporter dans `DB_ADMIN_PASSWORD`.
 
+## Utilisation
+
+```bash
+python epicevents.py --help          # liste des commandes
+python epicevents.py create-user     # créer un collaborateur
+```
+
+`create-user` demande le nom, l'email, le département (gestion, commercial ou support)
+et le mot de passe (saisi deux fois, sans affichage). Le mot de passe est enregistré
+haché avec Argon2. **Créez d'abord un collaborateur du département gestion** : c'est lui
+qui pourra ensuite gérer les autres comptes depuis l'application.
+
 ## Sécurité
 
 - **Moindre privilège** : le CRM se connecte avec un compte qui peut seulement lire et
@@ -163,11 +175,13 @@ responsable (ses clients, les contrats de ses clients, ses événements).
 Architecture **MVC** avec une couche d'accès aux données (pattern **Repository**) :
 
 ```
+├── epicevents.py         # point d'entrée : python epicevents.py <commande>
 ├── crm/                  # code de l'application
 │   ├── models/           # M : modèles SQLAlchemy (tables, relations, contraintes)
 │   ├── views/            # V : affichage dans le terminal et saisie
 │   ├── controllers/      # C : logique métier et vérification des permissions
 │   ├── repositories/     # seul point d'accès à la base de données
+│   ├── exceptions.py     # erreurs de saisie (ValidationError)
 │   ├── database.py       # connexion à PostgreSQL à partir du .env
 │   └── security.py       # hachage et vérification des mots de passe (Argon2)
 ├── scripts/              # outillage (à lancer depuis la racine)

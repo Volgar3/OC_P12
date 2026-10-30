@@ -1,0 +1,8 @@
+#!/bin/sh
+# Bloque le push si le code n'est pas propre (Ruff).
+if ! ./scripts/check.sh; then
+    echo ""
+    echo "PUSH ANNULÉ : corrigez les erreurs ci-dessus, puis relancez git push."
+    echo "Correction automatique du style : ruff check . --fix && ruff format ."
+    exit 1
+fi

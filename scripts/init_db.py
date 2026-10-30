@@ -1,7 +1,7 @@
 """Initialise la base de données du CRM Epic Events.
 
 À lancer après avoir rempli le fichier .env (voir .env.example). Le script :
-1. crée les comptes PostgreSQL propriétaire et applicatif, avec les mots de passe du .env ;
+1. crée les comptes PostgreSQL propriétaire et applicatif (mots de passe du .env) ;
 2. crée la base et ne donne au compte applicatif que les droits nécessaires ;
 3. lance seed.py, qui crée les tables puis insère les départements et leurs permissions.
 
@@ -15,8 +15,8 @@ import sys
 import psycopg
 from psycopg import sql
 
-import seed
-from database import get_env
+from crm.database import get_env
+from scripts import seed
 
 
 def admin_connection(dbname):
@@ -61,7 +61,7 @@ def create_database(cursor, name, owner, app_user):
 
 
 def grant_app_privileges(cursor, owner, app_user):
-    """Donne à `app_user` la lecture/écriture des données, sans droit sur la structure."""
+    """Donne à `app_user` la lecture/écriture des données, pas la structure."""
     owner, app_user = sql.Identifier(owner), sql.Identifier(app_user)
     statements = [
         "GRANT USAGE ON SCHEMA public TO {app}",

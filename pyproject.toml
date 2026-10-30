@@ -1,0 +1,12 @@
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+extend-exclude = ["env", "venv", ".venv"]
+
+[tool.ruff.lint]
+# E/W : PEP 8, F : erreurs (imports inutilisés, noms inconnus…),
+# I : ordre des imports, B : bugs fréquents, N : nommage PEP 8, UP : syntaxe moderne
+select = ["E", "W", "F", "I", "B", "N", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["crm"]

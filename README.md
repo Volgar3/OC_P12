@@ -11,7 +11,7 @@ collaborateur (gestion, commercial, support).
 
 ## Technologies
 
-- Python 3.9 ou plus récent
+- Python 3.10 ou plus récent
 - PostgreSQL (testé avec la version 18)
 - SQLAlchemy 2 (ORM) et psycopg 3 (driver PostgreSQL)
 - Argon2 (hachage des mots de passe)
@@ -21,7 +21,7 @@ collaborateur (gestion, commercial, support).
 
 ### 1. Prérequis
 
-- **Python 3.9+** : vérifier avec `python3 --version`.
+- **Python 3.10+** : vérifier avec `python3 --version`.
 - **PostgreSQL** installé et démarré, avec un compte **super-utilisateur** dont vous
   connaissez le nom (et le mot de passe s'il en a un).
   - macOS (Homebrew) :
@@ -68,8 +68,10 @@ c'est `init_db.py` qui crée ces comptes avec les mots de passe que vous inscriv
 ### 4. Initialiser la base de données
 
 ```bash
-python init_db.py
+python -m scripts.init_db
 ```
+
+(À lancer depuis la racine du projet : les scripts sont dans le dossier `scripts/`.)
 
 Le script effectue, dans l'ordre :
 
@@ -91,13 +93,13 @@ Résultat attendu :
 Le script peut être relancé sans risque : il ne recrée pas ce qui existe déjà.
 
 **Changer le mot de passe d'un compte** : modifier `DB_APP_PASSWORD` ou
-`DB_OWNER_PASSWORD` dans le `.env`, puis relancer `python init_db.py`. Le script
+`DB_OWNER_PASSWORD` dans le `.env`, puis relancer `python -m scripts.init_db`. Le script
 met à jour le mot de passe du compte existant ; l'ancien ne fonctionne plus.
 
 ### 5. Vérifier la connexion
 
 ```bash
-python database.py
+python -m crm.database
 ```
 
 Doit afficher `Connexion OK : epicevents_app sur la base epicevents (...)`.
@@ -158,14 +160,40 @@ responsable (ses clients, les contrats de ses clients, ses événements).
 
 ## Structure du projet
 
+Architecture **MVC** avec une couche d'accès aux données (pattern **Repository**) :
+
 ```
-├── database.py      # connexion à PostgreSQL à partir du .env
-├── models.py        # modèles SQLAlchemy (tables, relations, contraintes)
-├── security.py      # hachage et vérification des mots de passe (Argon2)
-├── seed.py          # tables, départements, permissions et leurs associations
-├── init_db.py       # initialisation complète : comptes, base, droits, puis seed
-├── docs/
-│   └── schema_bdd.png
-├── .env.example     # modèle de configuration
+├── crm/                  # code de l'application
+│   ├── models/           # M : modèles SQLAlchemy (tables, relations, contraintes)
+│   ├── views/            # V : affichage dans le terminal et saisie
+│   ├── controllers/      # C : logique métier et vérification des permissions
+│   ├── repositories/     # seul point d'accès à la base de données
+│   ├── database.py       # connexion à PostgreSQL à partir du .env
+│   └── security.py       # hachage et vérification des mots de passe (Argon2)
+├── scripts/              # outillage (à lancer depuis la racine)
+│   ├── init_db.py        # initialisation complète : comptes, base, droits, puis seed
+│   ├── seed.py           # tables, départements, permissions et leurs associations
+│   └── check.sh          # vérification qualité : Ruff
+├── .githooks/pre-push    # lance scripts/check.sh avant chaque git push
+├── pyproject.toml        # configuration de Ruff
+├── docs/schema_bdd.png   # schéma de la base de données
+├── .env.example          # modèle de configuration
 └── requirements.txt
+```
+
+## Qualité du code
+
+**Ruff** vérifie le respect de PEP 8, l'ordre des imports, le nommage et les bugs
+fréquents, et formate le code (longueur de ligne : 88).
+
+```bash
+ruff check . --fix && ruff format .   # corriger le style automatiquement
+./scripts/check.sh                    # tout vérifier, comme avant un push
+```
+
+**Aucun push de code non conforme** : un hook Git lance `scripts/check.sh` avant chaque
+`git push` et l'annule si Ruff signale un problème. Il s'active **une fois par clone** :
+
+```bash
+git config core.hooksPath .githooks
 ```

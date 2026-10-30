@@ -3,10 +3,10 @@
 Lancé automatiquement par init_db.py (après la création des comptes et de la base).
 """
 
-from sqlalchemy import select, create_engine
+from sqlalchemy import create_engine, select
 
-from database import Session, build_url
-from models import Base, Group, Permission
+from crm.database import Session, build_url
+from crm.models import Base, Group, Permission
 
 PERMISSIONS_BY_GROUP = {
     "gestion": [

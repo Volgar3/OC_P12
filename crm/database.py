@@ -10,7 +10,9 @@ load_dotenv()
 def get_env(name):
     value = os.getenv(name)
     if not value:
-        raise RuntimeError(f"Variable d'environnement manquante : {name} (voir .env.example)")
+        raise RuntimeError(
+            f"Variable d'environnement manquante : {name} (voir .env.example)"
+        )
     return value
 
 
@@ -32,7 +34,10 @@ Session = sessionmaker(bind=engine)
 def check_connection():
     with engine.connect() as connection:
         return connection.execute(
-            text("SELECT current_user, current_database(), current_setting('server_version')")
+            text(
+                "SELECT current_user, current_database(), "
+                "current_setting('server_version')"
+            )
         ).one()
 
 

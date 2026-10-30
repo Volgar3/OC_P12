@@ -10,7 +10,7 @@ def hash_password(password):
 
 
 def verify_password(password, password_hash):
-    """Retourne True si `password` correspond à l'empreinte `password_hash`, sinon False."""
+    """Retourne True si `password` correspond à l'empreinte `password_hash`."""
     try:
         return _hasher.verify(password_hash, password)
     except (VerificationError, InvalidHashError):

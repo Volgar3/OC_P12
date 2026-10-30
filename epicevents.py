@@ -13,9 +13,14 @@ def create_user():
     with Session() as session:
         UserController(session).create_user()
 
+def login():
+    with Session() as session:
+        UserController(session).login()
+
 
 COMMANDS = {
     "create-user": (create_user, "créer un collaborateur"),
+    "login": (login, "Se connecter"),
 }
 
 

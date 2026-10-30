@@ -5,6 +5,7 @@ contente de redemander un champ tant qu'il est refusé.
 """
 
 from getpass import getpass
+import jwt
 
 from crm.exceptions import ValidationError
 
@@ -62,3 +63,17 @@ def show_user_created(user):
 
 def show_error(message):
     print(f"Erreur : {message}")
+
+def login():
+    username = input("Username : ").strip()
+    password = ask_password(validators["password"])
+
+    # A déplacer dans le controlleur idéalement, la vue est faite uniquement pour l'entrée / sortie
+    if verify_password(password):
+        # /!\ Pseudocode
+        # JWT_SECRET a récupérer depuis le .env avec decouple
+        # Retrieve l'user et mettre ses groupes dans le token pour vérifier ensuite ses permissions
+        # avec le Bearer token passé en header
+        # Peut être changer en argon selon les specs ?
+        token = jwt.encode({"groups": user.groups()}, JWT_SECRET, algorithm="HS256")
+    return token

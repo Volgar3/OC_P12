@@ -67,3 +67,6 @@ class UserController:
             raise ValidationError(
                 f"le mot de passe doit faire au moins {PASSWORD_MIN_LENGTH} caractères."
             )
+
+    def login(self):
+        pass

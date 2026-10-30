@@ -76,7 +76,7 @@ class Client(Base):
         Date,
         server_default=func.now(),
     )
-    updated_at: Mapped[datetime] = mapped_column(
+    updated_at: Mapped[date] = mapped_column(
         Date,
         server_default=func.now(),
         onupdate=func.now(),

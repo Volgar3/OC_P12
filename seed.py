@@ -1,4 +1,7 @@
-"""Initialise la DB, à lancer en premier"""
+"""Crée les tables puis insère les départements et leurs permissions.
+
+Lancé automatiquement par init_db.py (après la création des comptes et de la base).
+"""
 
 from sqlalchemy import select, create_engine
 

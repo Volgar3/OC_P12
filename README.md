@@ -75,21 +75,24 @@ Le script effectue, dans l'ordre :
 
 1. la création des comptes `DB_OWNER_USER` et `DB_APP_USER` (sans aucun privilège
    global) avec les mots de passe du `.env` ;
-2. la création de la base `DB_NAME`, dont seul le compte applicatif peut se connecter ;
-3. la création des tables, avec le compte propriétaire ;
-4. l'insertion des 3 départements et de leurs permissions (`seed.py`).
+2. la création de la base `DB_NAME`, dont seul le compte applicatif peut se connecter,
+   et l'attribution à ce compte des seuls droits de lecture/écriture des données ;
+3. le lancement de `seed.py`, qui crée les tables (avec le compte propriétaire) puis
+   insère les 3 départements et leurs permissions.
 
 Résultat attendu :
 
 ```
-1/4 Comptes epicevents_owner et epicevents_app prêts.
-2/4 Base epicevents prête.
-3/4 Tables créées.
-4/4 Départements et permissions insérés.
+1/3 Comptes epicevents_owner et epicevents_app prêts.
+2/3 Base epicevents prête, droits du compte applicatif appliqués.
+3/3 Tables, départements et permissions créés.
 ```
 
-Le script peut être relancé sans risque : il ne recrée pas ce qui existe déjà
-(il met seulement à jour les mots de passe des comptes avec ceux du `.env`).
+Le script peut être relancé sans risque : il ne recrée pas ce qui existe déjà.
+
+**Changer le mot de passe d'un compte** : modifier `DB_APP_PASSWORD` ou
+`DB_OWNER_PASSWORD` dans le `.env`, puis relancer `python init_db.py`. Le script
+met à jour le mot de passe du compte existant ; l'ancien ne fonctionne plus.
 
 ### 5. Vérifier la connexion
 
@@ -159,8 +162,8 @@ responsable (ses clients, les contrats de ses clients, ses événements).
 ├── database.py      # connexion à PostgreSQL à partir du .env
 ├── models.py        # modèles SQLAlchemy (tables, relations, contraintes)
 ├── security.py      # hachage et vérification des mots de passe (Argon2)
-├── seed.py          # départements, permissions et leurs associations
-├── init_db.py       # initialisation complète de la base
+├── seed.py          # tables, départements, permissions et leurs associations
+├── init_db.py       # initialisation complète : comptes, base, droits, puis seed
 ├── docs/
 │   └── schema_bdd.png
 ├── .env.example     # modèle de configuration

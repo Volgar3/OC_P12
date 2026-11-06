@@ -1,1 +1,1 @@
-"""CRM Epic Events : code de l'application (architecture MVC + Repository)."""
+"""CRM Epic Events : code de l'application (architecture MVC + Managers)."""

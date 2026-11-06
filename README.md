@@ -58,9 +58,17 @@ cp .env.example .env
 | `DB_ADMIN_USER`, `DB_ADMIN_PASSWORD` | Super-utilisateur PostgreSQL **existant**. Utilisé uniquement par `init_db.py` pour créer les comptes et la base. Laisser le mot de passe vide s'il n'en a pas. |
 | `DB_OWNER_USER`, `DB_OWNER_PASSWORD` | Compte **propriétaire** de la base, créé par `init_db.py` avec ce mot de passe. Sert uniquement à créer les tables. |
 | `DB_APP_USER`, `DB_APP_PASSWORD` | Compte **applicatif**, créé par `init_db.py` avec ce mot de passe. Utilisé par le CRM, avec des droits limités. |
+| `JWT_SECRET` | Clé secrète qui **signe** les jetons de connexion : un jeton modifié ou fabriqué sans elle est refusé. À générer (voir ci-dessous) et à ne jamais partager. |
 
 Choisissez des mots de passe robustes pour les comptes propriétaire et applicatif :
 c'est `init_db.py` qui crée ces comptes avec les mots de passe que vous inscrivez ici.
+
+Générez ensuite la valeur de `JWT_SECRET` (une longue chaîne aléatoire) et collez-la
+dans le `.env` :
+
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
+```
 
 > Le fichier `.env` contient des secrets : il est ignoré par Git et ne doit **jamais**
 > être versionné.
@@ -172,7 +180,7 @@ responsable (ses clients, les contrats de ses clients, ses événements).
 
 ## Structure du projet
 
-Architecture **MVC** avec une couche d'accès aux données (pattern **Repository**) :
+Architecture **MVC** avec une couche d'accès aux données (les **managers**) :
 
 ```
 ├── epicevents.py         # point d'entrée : python epicevents.py <commande>
@@ -180,7 +188,7 @@ Architecture **MVC** avec une couche d'accès aux données (pattern **Repository
 │   ├── models/           # M : modèles SQLAlchemy (tables, relations, contraintes)
 │   ├── views/            # V : affichage dans le terminal et saisie
 │   ├── controllers/      # C : logique métier et vérification des permissions
-│   ├── repositories/     # seul point d'accès à la base de données
+│   ├── managers/         # seul point d'accès à la base de données
 │   ├── exceptions.py     # erreurs de saisie (ValidationError)
 │   ├── database.py       # connexion à PostgreSQL à partir du .env
 │   └── security.py       # hachage et vérification des mots de passe (Argon2)

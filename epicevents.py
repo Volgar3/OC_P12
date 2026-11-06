@@ -5,7 +5,7 @@ Usage : python epicevents.py <commande>
 
 import argparse
 
-from crm.controllers.create_user import UserController
+from crm.controllers.user import UserController
 from crm.database import Session
 
 

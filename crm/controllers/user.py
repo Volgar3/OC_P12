@@ -1,23 +1,26 @@
-"""Logique métier des collaborateurs : relie la vue et les repositories."""
+"""Logique métier des collaborateurs : relie la vue et les managers."""
 
 import re
 
+from crm.controllers.base import Controller
 from crm.exceptions import ValidationError
-from crm.repositories.group import GroupRepository
-from crm.repositories.user import UserRepository
-from crm.views import create_user as view
+from crm.managers.group import GroupManager
+from crm.managers.user import UserManager
+from crm.security import verify_password
+from crm.views.user import UserView
 
 EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 PASSWORD_MIN_LENGTH = 8
 
 
-class UserController:
+class UserController(Controller):
     """Création des collaborateurs."""
 
-    def __init__(self, session, view=view):
-        self.users = UserRepository(session)
-        self.groups = GroupRepository(session)
-        self.view = view
+    def __init__(self, session, view=None):
+        super().__init__()
+        self.users = UserManager(session)
+        self.groups = GroupManager(session)
+        self.view = view or UserView()
 
     def create_user(self):
         """Demande les informations à la vue (champ par champ, avec vérification
@@ -69,4 +72,14 @@ class UserController:
             )
 
     def login(self):
-        pass
+        """Demande les identifiants à la vue, les vérifie puis crée le token."""
+        email, password = self.view.login()
+        user = self.users.get_by_email(email)
+        if not user or not verify_password(password, user.password_hash):
+            self.view.show_error("email ou mot de passe incorrect.")
+            return None
+
+        token = self.create_token(user)
+        self.tokens.save(token)
+        self.view.show_logged_in(user)
+        return token

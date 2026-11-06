@@ -1,5 +1,6 @@
 # Secrets (identifiants BDD, secret JWT, DSN Sentry)
 .env
+.token
 
 # Environnement virtuel
 env/

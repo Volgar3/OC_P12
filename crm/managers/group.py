@@ -2,14 +2,12 @@
 
 from sqlalchemy import select
 
+from crm.managers.base import Manager
 from crm.models import Group
 
 
-class GroupRepository:
+class GroupManager(Manager):
     """Lecture des départements."""
-
-    def __init__(self, session):
-        self.session = session
 
     def get_all(self):
         """Retourne tous les départements, triés par nom."""

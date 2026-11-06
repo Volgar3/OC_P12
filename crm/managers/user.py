@@ -2,15 +2,13 @@
 
 from sqlalchemy import select
 
+from crm.managers.base import Manager
 from crm.models import User
 from crm.security import hash_password
 
 
-class UserRepository:
+class UserManager(Manager):
     """Lecture et écriture des collaborateurs."""
-
-    def __init__(self, session):
-        self.session = session
 
     def get_by_email(self, email):
         """Retourne le collaborateur ayant cet email, ou None."""

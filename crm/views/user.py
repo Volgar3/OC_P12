@@ -109,4 +109,3 @@ class UserView(View):
 
     def show_logged_out(self):
         print("Vous êtes déconnecté.")
-

@@ -124,13 +124,24 @@ super-utilisateur (`\password` dans `psql`) et à le reporter dans `DB_ADMIN_PAS
 
 ```bash
 python epicevents.py --help          # liste des commandes
-python epicevents.py create-user     # créer un collaborateur
+python epicevents.py user --help     # actions sur les collaborateurs
 ```
 
-`create-user` demande le nom, l'email, le département (gestion, commercial ou support)
+Les commandes de session sont au premier niveau, les autres sont rangées par entité
+(`python epicevents.py <entité> <action>`) :
+
+| Commande | Rôle | Réservé à |
+|---|---|---|
+| `login` | Se connecter (3 essais) ; la session dure 1 h | — |
+| `logout` | Se déconnecter | — |
+| `user create` | Créer un collaborateur | gestion |
+| `user update` | Modifier un collaborateur (département, mot de passe…) | gestion |
+| `user delete` | Supprimer un collaborateur | gestion |
+
+`user create` demande le nom, l'email, le département (gestion, commercial ou support)
 et le mot de passe (saisi deux fois, sans affichage). Le mot de passe est enregistré
-haché avec Argon2. **Créez d'abord un collaborateur du département gestion** : c'est lui
-qui pourra ensuite gérer les autres comptes depuis l'application.
+haché avec Argon2. **Le tout premier compte peut être créé sans être connecté : créez un
+collaborateur du département gestion**, c'est lui qui gérera ensuite les autres comptes.
 
 ## Sécurité
 
@@ -183,7 +194,7 @@ responsable (ses clients, les contrats de ses clients, ses événements).
 Architecture **MVC** avec une couche d'accès aux données (les **managers**) :
 
 ```
-├── epicevents.py         # point d'entrée : python epicevents.py <commande>
+├── epicevents.py         # point d'entrée : python epicevents.py <entité> <action>
 ├── crm/                  # code de l'application
 │   ├── models/           # M : modèles SQLAlchemy (tables, relations, contraintes)
 │   ├── views/            # V : affichage dans le terminal et saisie

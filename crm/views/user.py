@@ -85,8 +85,8 @@ class UserView(View):
         return input("Email du collaborateur : ").strip()
 
     def ask_confirmation(self, question):
-        """Pose une question oui/non ; seul « o » vaut oui."""
-        return input(f"{question} (o/N) : ").strip().lower() == "o"
+        """Pose une question oui/non ; seul « Y » (ou « y ») vaut oui."""
+        return input(f"{question} (Y/N) : ").strip().lower() == "y"
 
     def show_user_created(self, user):
         print(f"Collaborateur « {user.name} » créé (pole : {user.group.name}).")

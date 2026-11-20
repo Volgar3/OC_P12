@@ -137,6 +137,13 @@ Les commandes de session sont au premier niveau, les autres sont rangées par en
 | `user create` | Créer un collaborateur | gestion |
 | `user update` | Modifier un collaborateur (département, mot de passe…) | gestion |
 | `user delete` | Supprimer un collaborateur | gestion |
+| `client list` | Afficher tous les clients | tous |
+| `contract list` | Afficher tous les contrats | tous |
+| `contract unsigned` | Contrats non signés | tous |
+| `contract unpaid` | Contrats pas entièrement payés | tous |
+| `event list` | Afficher tous les événements | tous |
+| `event no-support` | Événements sans support associé | tous |
+| `event mine` | Mes événements (dont je suis le support) | tous |
 
 `user create` demande le nom, l'email, le département (gestion, commercial ou support)
 et le mot de passe (saisi deux fois, sans affichage). Le mot de passe est enregistré

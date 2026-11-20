@@ -7,6 +7,9 @@ Usage :
 
 import argparse
 
+from crm.controllers.client import ClientController
+from crm.controllers.contract import ContractController
+from crm.controllers.event import EventController
 from crm.controllers.user import UserController
 from crm.database import Session
 
@@ -25,6 +28,31 @@ ENTITY_COMMANDS = {
             "create": ("create_user", "créer un collaborateur"),
             "update": ("update_user", "modifier un collaborateur (et son mdp)"),
             "delete": ("delete_user", "supprimer un collaborateur"),
+        },
+    ),
+    "client": (
+        ClientController,
+        "consulter les clients",
+        {
+            "list": ("list_clients", "afficher tous les clients"),
+        },
+    ),
+    "contract": (
+        ContractController,
+        "consulter les contrats",
+        {
+            "list": ("list_contracts", "afficher tous les contrats"),
+            "unsigned": ("list_unsigned", "contrats non signés"),
+            "unpaid": ("list_not_fully_paid", "contrats pas entièrement payés"),
+        },
+    ),
+    "event": (
+        EventController,
+        "consulter les événements",
+        {
+            "list": ("list_events", "afficher tous les événements"),
+            "no-support": ("list_without_support", "événements sans support"),
+            "mine": ("list_mine", "mes événements (dont je suis le support)"),
         },
     ),
 }

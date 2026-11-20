@@ -100,7 +100,7 @@ class UserController(Controller):
             return None
         if user.clients:
             self.view.show_error(
-                f"{user.name} est le commercial de {len(user.clients)} client(s) : "
+                f"ce commercial possède {len(user.clients)} client(s), "
                 "attribuez-les d'abord à un autre commercial."
             )
             return None
